@@ -1,0 +1,114 @@
+<section class="contact-section" id="contact">
+    <div class="container">
+        <div class="contact-content">
+            <div class="contact-info">
+                <h2>{{ 'contact.title' | translate }}</h2>
+                <p>{{ 'contact.subtitle' | translate }}</p>
+
+                <div class="info-item">
+                    <span class="icon">
+                        <i class="pi pi-map-marker"></i>
+                    </span>
+                    <div>
+                        <h3>{{ 'contact.address.title' | translate }}</h3>
+                        <p>{{ 'contact.address.value' | translate }}</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <span class="icon">
+                        <i class="pi pi-envelope"></i>
+                    </span>
+                    <div>
+                        <h3>{{ 'contact.email.title' | translate }}</h3>
+                        <p>contact&#64;baseproject.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-container">
+                <p-toast></p-toast>
+                <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+                    <!-- Name -->
+                    <div class="form-group">
+                        <label for="name">{{ 'contact.form.name' | translate }}</label>
+                        <input pInputText id="name" formControlName="name" type="text" class="w-full"
+                            [class.ng-invalid]="f['name'].invalid && (f['name'].touched || submitted())"
+                            [class.ng-dirty]="f['name'].touched || submitted()" />
+                        @if (f['name'].invalid && (f['name'].touched || submitted())) {
+                        <small class="error-msg">
+                            @if (f['name'].errors?.['required']) {
+                            {{ 'validation.required' | translate }}
+                            } @else if (f['name'].errors?.['minlength']) {
+                            {{ 'validation.minLength' | translate }} (2)
+                            } @else if (f['name'].errors?.['maxlength']) {
+                            {{ 'validation.maxLength' | translate }} (50)
+                            }
+                        </small>
+                        }
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email">{{ 'contact.form.email' | translate }}</label>
+                        <input pInputText id="email" formControlName="email" type="email" class="w-full"
+                            [class.ng-invalid]="f['email'].invalid && (f['email'].touched || submitted())"
+                            [class.ng-dirty]="f['email'].touched || submitted()" />
+                        @if (f['email'].invalid && (f['email'].touched || submitted())) {
+                        <small class="error-msg">
+                            @if (f['email'].errors?.['required']) {
+                            {{ 'validation.required' | translate }}
+                            } @else if (f['email'].errors?.['email']) {
+                            {{ 'validation.email' | translate }}
+                            }
+                        </small>
+                        }
+                    </div>
+
+                    <!-- Subject -->
+                    <div class="form-group">
+                        <label for="subject">{{ 'contact.form.subject' | translate }}</label>
+                        <input pInputText id="subject" formControlName="subject" type="text" class="w-full"
+                            [class.ng-invalid]="f['subject'].invalid && (f['subject'].touched || submitted())"
+                            [class.ng-dirty]="f['subject'].touched || submitted()" />
+                        @if (f['subject'].invalid && (f['subject'].touched || submitted())) {
+                        <small class="error-msg">
+                            @if (f['subject'].errors?.['required']) {
+                            {{ 'validation.required' | translate }}
+                            } @else if (f['subject'].errors?.['minlength']) {
+                            {{ 'validation.minLength' | translate }} (3)
+                            } @else if (f['subject'].errors?.['maxlength']) {
+                            {{ 'validation.maxLength' | translate }} (100)
+                            }
+                        </small>
+                        }
+                    </div>
+
+                    <!-- Message -->
+                    <div class="form-group">
+                        <label for="message">{{ 'contact.form.message' | translate }}</label>
+                        <textarea pTextarea id="message" formControlName="message" [rows]="5" class="w-full"
+                            [class.ng-invalid]="f['message'].invalid && (f['message'].touched || submitted())"
+                            [class.ng-dirty]="f['message'].touched || submitted()"></textarea>
+                        @if (f['message'].invalid && (f['message'].touched || submitted())) {
+                        <small class="error-msg">
+                            @if (f['message'].errors?.['required']) {
+                            {{ 'validation.required' | translate }}
+                            } @else if (f['message'].errors?.['minlength']) {
+                            {{ 'validation.minLength' | translate }} (10)
+                            } @else if (f['message'].errors?.['maxlength']) {
+                            {{ 'validation.maxLength' | translate }} (1000)
+                            }
+                        </small>
+                        }
+                    </div>
+
+                    <p-button type="submit" [label]="(isLoading ? 'common.loading' : 'contact.form.submit') | translate"
+                        icon="pi pi-send" [loading]="isLoading" styleClass="w-full" severity="primary"
+                        [disabled]="isLoading">
+                    </p-button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

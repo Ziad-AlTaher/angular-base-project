@@ -1,0 +1,29 @@
+<div class="hero-slider">
+    @for (slide of slides; track slide.id; let i = $index) {
+    <div class="slide" [class.active]="currentSlide() === i" [style.backgroundImage]="'url(' + slide.image + ')'">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="slide-content">
+                <h1>{{ slide.title | translate }}</h1>
+                <p>{{ slide.description | translate }}</p>
+                <button class="cta-button" routerLink="/contact">
+                    {{ 'home.slider.cta' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+    }
+
+    <div class="slider-controls">
+        <button class="prev" (click)="prevSlide()" aria-label="Previous slide">❮</button>
+        <button class="next" (click)="nextSlide()" aria-label="Next slide">❯</button>
+    </div>
+
+    <div class="slider-dots">
+        @for (slide of slides; track slide.id; let i = $index) {
+        <button class="dot" [class.active]="currentSlide() === i" (click)="goToSlide(i)"
+            [attr.aria-label]="'Go to slide ' + (i + 1)">
+        </button>
+        }
+    </div>
+</div>

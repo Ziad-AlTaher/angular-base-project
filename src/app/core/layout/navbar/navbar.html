@@ -1,0 +1,45 @@
+<nav class="navbar" [class.glassy]="true">
+    <div class="container">
+        <div class="navbar-brand">
+            <a routerLink="/">BaseProject</a>
+        </div>
+
+        <!-- Hamburger toggle (mobile only) -->
+        <button class="hamburger" (click)="toggleSidebar()" [attr.aria-label]="'menu'">
+            <i class="pi" [ngClass]="isSidebarOpen ? 'pi-times' : 'pi-bars'"></i>
+        </button>
+
+        <!-- Sidebar overlay (mobile only) -->
+        <div class="sidebar-overlay" [class.open]="isSidebarOpen" (click)="closeSidebar()"></div>
+
+        <!-- Sidebar / Nav links -->
+        <div class="sidebar" [class.open]="isSidebarOpen">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                        (click)="closeSidebar()">
+                        {{ 'navbar.home' | translate }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="/services" routerLinkActive="active" (click)="closeSidebar()">
+                        {{ 'navbar.services' | translate }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a routerLink="/contact" (click)="closeSidebar()">{{ 'navbar.contact' | translate }}</a>
+                </li>
+            </ul>
+
+            <div class="navbar-actions">
+                <!-- <p-button [text]="true" [rounded]="true" (onClick)="toggleTheme()"
+                    [icon]="isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'" [attr.aria-label]="'theme.toggle' | translate">
+                </p-button> -->
+
+                <p-button [text]="true" [rounded]="true" (onClick)="toggleLanguage()"
+                    [label]="currentLang() === 'en' ? 'عربي' : 'English'">
+                </p-button>
+            </div>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,80 @@
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <!-- About Section -->
+            <div class="footer-section">
+                <h3>BaseProject</h3>
+                <p>{{ 'footer.about' | translate }}</p>
+                <div class="social-icons">
+                    <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"
+                        class="social-icon">
+                        <i class="pi pi-facebook"></i>
+                    </a>
+                    <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter"
+                        class="social-icon">
+                        <i class="pi pi-twitter"></i>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"
+                        class="social-icon">
+                        <i class="pi pi-instagram"></i>
+                    </a>
+                    <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube"
+                        class="social-icon">
+                        <i class="pi pi-youtube"></i>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"
+                        class="social-icon">
+                        <i class="pi pi-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-section">
+                <h4>{{ 'footer.links' | translate }}</h4>
+                <ul>
+                    <li><a routerLink="/"><i class="pi pi-chevron-left"></i> {{ 'navbar.home' | translate }}</a></li>
+                    <li><a routerLink="/contact"><i class="pi pi-chevron-left"></i> {{ 'navbar.contact' | translate
+                            }}</a></li>
+                    <li><a href="#"><i class="pi pi-chevron-left"></i> {{ 'navbar.services' | translate }}</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="footer-section">
+                <h4>{{ 'footer.contact' | translate }}</h4>
+                <ul class="contact-list">
+                    <li><i class="pi pi-envelope"></i> info&#64;baseproject.com</li>
+                    <li><i class="pi pi-phone"></i> +123 456 7890</li>
+                    <li><i class="pi pi-map-marker"></i> {{ 'contact.address.value' | translate }}</li>
+                </ul>
+            </div>
+
+            <!-- Download App -->
+            <div class="footer-section">
+                <h4>{{ 'footer.downloadApp' | translate }}</h4>
+                <p class="download-desc">{{ 'footer.downloadDesc' | translate }}</p>
+                <div class="app-buttons">
+                    <a href="#" class="app-btn google-play" target="_blank" rel="noopener">
+                        <i class="pi pi-google"></i>
+                        <div class="app-btn-text">
+                            <span class="app-btn-small">{{ 'footer.getItOn' | translate }}</span>
+                            <span class="app-btn-big">Google Play</span>
+                        </div>
+                    </a>
+                    <a href="#" class="app-btn app-store" target="_blank" rel="noopener">
+                        <i class="pi pi-apple"></i>
+                        <div class="app-btn-text">
+                            <span class="app-btn-small">{{ 'footer.downloadOn' | translate }}</span>
+                            <span class="app-btn-big">App Store</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 BaseProject. {{ 'footer.rights' | translate }}</p>
+        </div>
+    </div>
+</footer>

@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { LoadingSpinnerComponent } from './core/layout/loading-spinner/loading-spinner';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, LoadingSpinnerComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

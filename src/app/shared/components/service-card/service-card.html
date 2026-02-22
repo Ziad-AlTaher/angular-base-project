@@ -1,0 +1,30 @@
+<div class="service-card" [class.clickable]="clickable" (click)="onCardClick()">
+    <div class="card-image-wrapper">
+        <img [src]="card.imageUrl" [alt]="card.title" loading="lazy" (error)="onImageError($event)"
+            class="card-image" />
+        <div class="card-category">{{ card.category }}</div>
+    </div>
+
+    <div class="card-body">
+        <h3 class="card-title">{{ card.title }}</h3>
+        <p class="card-description">{{ card.description }}</p>
+
+        <div class="card-meta">
+            <span class="meta-item">
+                <i class="pi pi-user"></i>
+                {{ card.author }}
+            </span>
+        </div>
+
+        <div class="card-stats">
+            <span class="stat-item">
+                <i class="pi pi-eye"></i>
+                {{ card.viewCount }}
+            </span>
+            <span class="stat-item">
+                <i class="pi pi-download"></i>
+                {{ card.downloadCount }}
+            </span>
+        </div>
+    </div>
+</div>

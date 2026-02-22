@@ -8,7 +8,23 @@
   "projects": {
     "base-project": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -18,11 +34,13 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
+            "polyfills": [
+              "zone.js"
+            ],
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "public",
+              "public/i18n",
+              "src/favicon.ico"
             ],
             "styles": [
               "src/styles.css"

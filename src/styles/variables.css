@@ -1,0 +1,75 @@
+:root {
+    /* Font Families */
+    --font-secondary: Roboto, "Helvetica Neue", sans-serif;
+    --font-special: "Persian Sols 2", sans-serif;
+    --font-amiri: "Amiri", serif;
+    --arabic-font: "Uthmanic", "Scheherazade", "Traditional Arabic", serif;
+
+    /* Brand Colors */
+    --color-primary: #027373;
+    --color-primary-light: #038C7F;
+    --color-secondary: #038C7F;
+    --color-accent: #A9D9D0;
+    --color-warm: #F2E7DC;
+    --color-dark: #0D0D0D;
+    --color-success: #038C7F;
+    --color-danger: #c0392b;
+    --color-warning: #e67e22;
+
+    /* Text colors */
+    --text-primary: #0D0D0D;
+    --text-secondary: #3a3a3a;
+    --text-muted: #7a7a7a;
+    --text-on-primary: #ffffff;
+
+    /* Background colors */
+    --bg-primary: #ffffff;
+    --bg-secondary: #F2E7DC;
+    --bg-tertiary: #A9D9D0;
+
+    /* Font sizes */
+    --font-xs: 0.75rem;
+    --font-sm: 0.875rem;
+    --font-base: 1rem;
+    --font-lg: 1.125rem;
+    --font-xl: 1.25rem;
+    --font-2xl: 1.5rem;
+    --font-3xl: 1.875rem;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* Border radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-full: 9999px;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(2, 115, 115, 0.08);
+    --shadow-md: 0 4px 6px -1px rgba(2, 115, 115, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(2, 115, 115, 0.12);
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    --gradient-accent: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+}
+
+[data-theme="dark"] {
+    --bg-primary: #0D0D0D;
+    --bg-secondary: #1a1a1a;
+    --bg-tertiary: #2a2a2a;
+    --text-primary: #F2E7DC;
+    --text-secondary: #A9D9D0;
+    --text-muted: #7a7a7a;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #038C7F, #027373);
+    --gradient-accent: linear-gradient(135deg, #027373, #A9D9D0);
+}

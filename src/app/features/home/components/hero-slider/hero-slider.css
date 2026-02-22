@@ -1,0 +1,213 @@
+.hero-slider {
+    position: relative;
+    height: 80vh;
+    /* Adjust height as needed */
+    width: 100%;
+    overflow: hidden;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    display: flex;
+    align-items: center;
+}
+
+.slide.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    /* Dark overlay for text readability */
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+.slide-content {
+    color: white;
+    max-width: 600px;
+    text-align: center;
+    /* Center text for impact */
+    margin: 0 auto;
+}
+
+.slide-content h1 {
+    font-size: var(--font-3xl);
+    margin-bottom: var(--spacing-md);
+    font-weight: bold;
+}
+
+.slide-content p {
+    font-size: var(--font-lg);
+    margin-bottom: var(--spacing-xl);
+    line-height: 1.6;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--color-primary);
+    color: white;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    border: none;
+    cursor: pointer;
+    font-size: var(--font-base);
+}
+
+.cta-button:hover {
+    background-color: var(--color-secondary);
+    transform: translateY(-2px);
+}
+
+/* Controls */
+.slider-controls button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    padding: var(--spacing-md);
+    font-size: var(--font-2xl);
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 50%;
+    transition: background 0.3s;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider-controls button:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.prev {
+    left: var(--spacing-md);
+}
+
+.next {
+    right: var(--spacing-md);
+}
+
+[dir="rtl"] .prev {
+    left: auto;
+    right: var(--spacing-md);
+    transform: translateY(-50%) rotate(180deg);
+}
+
+[dir="rtl"] .next {
+    right: auto;
+    left: var(--spacing-md);
+    transform: translateY(-50%) rotate(180deg);
+}
+
+
+.slider-dots {
+    position: absolute;
+    bottom: var(--spacing-xl);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: var(--spacing-sm);
+    z-index: 10;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+    padding: 0;
+}
+
+.dot.active {
+    background: white;
+    transform: scale(1.2);
+}
+
+/* ===========================
+   Tablet (< 768px)
+   =========================== */
+@media (max-width: 768px) {
+    .hero-slider {
+        height: 60vh;
+    }
+
+    .slide-content h1 {
+        font-size: var(--font-2xl);
+    }
+
+    .slide-content p {
+        font-size: var(--font-base);
+    }
+
+    .slider-controls button {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: var(--font-xl);
+        padding: var(--spacing-sm);
+    }
+
+    .cta-button {
+        padding: var(--spacing-sm) var(--spacing-lg);
+        font-size: var(--font-sm);
+    }
+}
+
+/* ===========================
+   Mobile (< 480px)
+   =========================== */
+@media (max-width: 480px) {
+    .hero-slider {
+        height: 50vh;
+    }
+
+    .slide-content h1 {
+        font-size: var(--font-xl);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .slide-content p {
+        font-size: var(--font-sm);
+        margin-bottom: var(--spacing-md);
+    }
+
+    .slider-controls button {
+        display: none;
+    }
+
+    .dot {
+        width: 8px;
+        height: 8px;
+    }
+}

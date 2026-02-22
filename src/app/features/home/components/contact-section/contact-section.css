@@ -1,0 +1,112 @@
+.contact-section {
+    padding: var(--spacing-2xl) 0;
+    background-color: var(--bg-primary);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+.contact-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-2xl);
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .contact-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+.contact-info h2 {
+    font-size: var(--font-3xl);
+    margin-bottom: var(--spacing-md);
+    color: var(--color-primary);
+}
+
+.contact-info>p {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-2xl);
+    font-size: var(--font-lg);
+    line-height: 1.6;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.info-item .icon {
+    font-size: var(--font-xl);
+    min-width: 3.5rem;
+    height: 3.5rem;
+    background: var(--gradient-accent);
+    color: var(--text-on-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-item h3 {
+    font-size: var(--font-lg);
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-primary);
+}
+
+.info-item p {
+    color: var(--text-secondary);
+    margin-bottom: 0;
+}
+
+.contact-form-container {
+    background: var(--bg-secondary);
+    padding: var(--spacing-2xl);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+}
+
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: var(--font-base);
+}
+
+/* Ensure PrimeNG inputs take full width */
+:host ::ng-deep .p-inputtext,
+:host ::ng-deep .p-textarea {
+    width: 100%;
+}
+
+/* Validation error messages */
+.error-msg {
+    display: block;
+    color: var(--color-danger);
+    font-size: var(--font-sm);
+    margin-top: var(--spacing-xs);
+    animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

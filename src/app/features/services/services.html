@@ -1,0 +1,191 @@
+<section class="services-page">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">{{ 'services.title' | translate }}</h1>
+            <p class="page-subtitle">{{ 'services.subtitle' | translate }}</p>
+        </div>
+        <div class="header-decoration"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- Section 1: Horizontal Carousel (Infinite Loading)      -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="services-section">
+        <div class="section-header">
+            <h2 class="section-title">{{ 'services.section1Title' | translate }}</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        @if (carouselLoading() && carouselCards().length === 0) {
+        <div class="skeleton-carousel">
+            @for (i of [1,2,3,4]; track i) {
+            <div class="skeleton-card">
+                <p-skeleton width="100%" height="12rem" />
+                <div class="skeleton-body">
+                    <p-skeleton width="80%" height="1.25rem" />
+                    <p-skeleton width="100%" height="0.875rem" />
+                    <p-skeleton width="60%" height="0.875rem" />
+                </div>
+            </div>
+            }
+        </div>
+        } @else if (carouselCards().length > 0) {
+        <p-carousel [value]="carouselCards()" [numVisible]="4" [numScroll]="1" [circular]="false"
+            [responsiveOptions]="carouselResponsiveOptions" [showIndicators]="false" (onPage)="onCarouselPage($event)"
+            class="services-carousel">
+            <ng-template #item let-card>
+                <div class="carousel-card-wrapper">
+                    <app-service-card [card]="card" (cardClick)="onNavigateToService($event)" />
+                </div>
+            </ng-template>
+        </p-carousel>
+
+        @if (carouselLoading()) {
+        <div class="carousel-loading">
+            <i class="pi pi-spin pi-spinner"></i>
+            <span>{{ 'common.loading' | translate }}</span>
+        </div>
+        }
+        }
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- Section 2: Vertical Grid with Pagination               -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="services-section section-alt">
+        <div class="section-header">
+            <h2 class="section-title">{{ 'services.section2Title' | translate }}</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        @if (gridLoading()) {
+        <div class="grid-skeleton">
+            @for (i of [1,2,3,4,5,6]; track i) {
+            <div class="skeleton-card">
+                <p-skeleton width="100%" height="12rem" />
+                <div class="skeleton-body">
+                    <p-skeleton width="80%" height="1.25rem" />
+                    <p-skeleton width="100%" height="0.875rem" />
+                    <p-skeleton width="60%" height="0.875rem" />
+                </div>
+            </div>
+            }
+        </div>
+        } @else if (gridCards().length > 0) {
+        <div class="services-grid">
+            @for (card of gridCards(); track card.id) {
+            <app-service-card [card]="card" (cardClick)="onNavigateToService($event)" />
+            }
+        </div>
+        } @else {
+        <div class="empty-state">
+            <i class="pi pi-inbox"></i>
+            <p>{{ 'services.noResults' | translate }}</p>
+        </div>
+        }
+
+        @if (gridTotalRecords() > 0) {
+        <p-paginator [rows]="6" [totalRecords]="gridTotalRecords()" [first]="gridPage()"
+            (onPageChange)="onGridPageChange($event)" [showFirstLastIcon]="true" class="grid-paginator" />
+        }
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- Section 3: Full-Width Slider with Modal                -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="services-section">
+        <div class="section-header">
+            <h2 class="section-title">{{ 'services.section3Title' | translate }}</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        @if (galleryLoading()) {
+        <div class="gallery-skeleton">
+            <p-skeleton width="100%" height="20rem" />
+        </div>
+        } @else if (galleryCards().length > 0) {
+        <p-carousel [value]="galleryCards()" [numVisible]="1" [numScroll]="1" [circular]="true"
+            [autoplayInterval]="5000" [showIndicators]="true" class="gallery-carousel">
+            <ng-template #item let-card>
+                <div class="gallery-card" (click)="openDetail(card)">
+                    <div class="gallery-image-wrapper">
+                        <img [src]="card.imageUrl" [alt]="card.title" loading="lazy" class="gallery-image" />
+                        <div class="gallery-overlay">
+                            <div class="gallery-content">
+                                <span class="gallery-category">{{ card.category }}</span>
+                                <h3 class="gallery-title">{{ card.title }}</h3>
+                                <p class="gallery-description">{{ card.description }}</p>
+                                <span class="gallery-cta">
+                                    <i class="pi pi-info-circle"></i>
+                                    {{ 'services.viewDetails' | translate }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </p-carousel>
+        }
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- Detail Dialog (Modal)                                   -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <p-dialog [(visible)]="dialogVisible" [modal]="true" [dismissableMask]="true" [draggable]="false"
+        [resizable]="false" [style]="{ width: '90vw', maxWidth: '50rem' }" [header]="selectedCard()?.title || ''"
+        styleClass="detail-dialog">
+        @if (selectedCard(); as card) {
+        <div class="dialog-body">
+            <div class="dialog-image-wrapper">
+                <img [src]="card.imageUrl" [alt]="card.title" class="dialog-image" />
+            </div>
+
+            <div class="dialog-info">
+                <div class="dialog-meta-grid">
+                    <div class="dialog-meta-item">
+                        <span class="meta-label">{{ 'services.author' | translate }}</span>
+                        <span class="meta-value">{{ card.author }}</span>
+                    </div>
+                    <div class="dialog-meta-item">
+                        <span class="meta-label">{{ 'services.publisher' | translate }}</span>
+                        <span class="meta-value">{{ card.publisher }}</span>
+                    </div>
+                    @if (card.translator) {
+                    <div class="dialog-meta-item">
+                        <span class="meta-label">{{ 'services.translator' | translate }}</span>
+                        <span class="meta-value">{{ card.translator }}</span>
+                    </div>
+                    }
+                    <div class="dialog-meta-item">
+                        <span class="meta-label">{{ 'services.category' | translate }}</span>
+                        <span class="meta-value">{{ card.category }}</span>
+                    </div>
+                </div>
+
+                <div class="dialog-description">
+                    <h4>{{ 'services.description' | translate }}</h4>
+                    <p>{{ card.description }}</p>
+                </div>
+
+                <div class="dialog-stats">
+                    <span class="stat-badge">
+                        <i class="pi pi-eye"></i> {{ card.viewCount }} {{ 'services.views' | translate }}
+                    </span>
+                    <span class="stat-badge">
+                        <i class="pi pi-download"></i> {{ card.downloadCount }} {{ 'services.downloads' | translate }}
+                    </span>
+                </div>
+
+                @if (card.downloadLink) {
+                <a [href]="card.downloadLink" [target]="card.outSource ? '_blank' : '_self'" rel="noopener noreferrer"
+                    class="download-btn">
+                    <i class="pi pi-download"></i>
+                    {{ 'services.download' | translate }}
+                </a>
+                }
+            </div>
+        </div>
+        }
+    </p-dialog>
+</section>

@@ -1,0 +1,60 @@
+{
+    "navbar": {
+        "home": "Home",
+        "services": "Services",
+        "service1": "Web Development",
+        "service2": "Mobile Apps",
+        "contact": "Contact Us"
+    },
+    "footer": {
+        "about": "We build amazing digital experiences that help your business grow.",
+        "links": "Quick Links",
+        "contact": "Contact info",
+        "rights": "All rights reserved."
+    },
+    "home": {
+        "slider": {
+            "cta": "Get Started",
+            "slide1": {
+                "title": "Welcome to BaseProject",
+                "desc": "Building future-proof applications with modern technologies."
+            },
+            "slide2": {
+                "title": "Professional Services",
+                "desc": "Expert solutions tailored to your business needs."
+            },
+            "slide3": {
+                "title": "Global Reach",
+                "desc": "Connecting you with customers around the world."
+            }
+        }
+    },
+    "contact": {
+        "title": "Get In Touch",
+        "subtitle": "Have a project in mind? We'd love to hear from you.",
+        "address": {
+            "title": "Our Location",
+            "value": "123 Innovation Street, Tech City"
+        },
+        "email": {
+            "title": "Email Us"
+        },
+        "form": {
+            "name": "Your Name",
+            "email": "Your Email",
+            "message": "Your Message",
+            "submit": "Send Message"
+        }
+    },
+    "common": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "loading": "Loading...",
+        "error": "Error"
+    },
+    "theme": {
+        "toggle": "Toggle Theme"
+    }
+}

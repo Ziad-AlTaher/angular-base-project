@@ -1,1 +1,100 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'tailwindcss';
+@import './styles/variables.css';
+@import 'primeicons/primeicons.css';
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-secondary);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* ================================
+   Custom PrimeNG Toast Styles
+   ================================ */
+
+/* Toast container — position top-center */
+.p-toast {
+    opacity: 1 !important;
+}
+
+/* Individual toast message */
+.p-toast-message {
+    border-radius: 12px !important;
+    backdrop-filter: blur(10px) !important;
+    border: none !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+    margin-bottom: 0.75rem !important;
+    overflow: hidden !important;
+}
+
+/* Success toast */
+.p-toast-message-success {
+    background: linear-gradient(135deg, #038C7F, #027373) !important;
+    color: #fff !important;
+}
+
+.p-toast-message-success .p-toast-icon,
+.p-toast-message-success .p-toast-summary,
+.p-toast-message-success .p-toast-detail,
+.p-toast-message-success .p-toast-close-button {
+    color: #fff !important;
+}
+
+/* Error toast */
+.p-toast-message-error {
+    background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+    color: #fff !important;
+}
+
+.p-toast-message-error .p-toast-icon,
+.p-toast-message-error .p-toast-summary,
+.p-toast-message-error .p-toast-detail,
+.p-toast-message-error .p-toast-close-button {
+    color: #fff !important;
+}
+
+/* Warning toast */
+.p-toast-message-warn {
+    background: linear-gradient(135deg, #f39c12, #e67e22) !important;
+    color: #fff !important;
+}
+
+.p-toast-message-warn .p-toast-icon,
+.p-toast-message-warn .p-toast-summary,
+.p-toast-message-warn .p-toast-detail,
+.p-toast-message-warn .p-toast-close-button {
+    color: #fff !important;
+}
+
+/* Info toast */
+.p-toast-message-info {
+    background: linear-gradient(135deg, #3498db, #2980b9) !important;
+    color: #fff !important;
+}
+
+.p-toast-message-info .p-toast-icon,
+.p-toast-message-info .p-toast-summary,
+.p-toast-message-info .p-toast-detail,
+.p-toast-message-info .p-toast-close-button {
+    color: #fff !important;
+}
+
+/* Toast text styling */
+.p-toast-summary {
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+}
+
+.p-toast-detail {
+    font-size: 0.9rem !important;
+    margin-top: 4px !important;
+    opacity: 0.95 !important;
+}
