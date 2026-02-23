@@ -85,12 +85,12 @@ export class ServicesComponent extends BaseComponent implements OnInit {
         this.carouselLoading.set(true);
 
         this.bookService.getBooks(this.carouselPage, this.carouselPageSize)
-            .pipe(takeUntil(this.destroy$))
+            .pipe(takeUntil(this.destroy$)) // اشرح دا 
             .subscribe({
                 next: (res) => {
                     const lang = this.currentLang();
-                    const newCards = res.data.items.map(b => mapBookToCard(b, lang));
-                    this.carouselCards.update(prev => [...prev, ...newCards]);
+                    const newCards = res.data.items.map(b => mapBookToCard(b, lang)); // اشرح دا 
+                    this.carouselCards.update(prev => [...prev, ...newCards]);// اشرح دا 
 
                     // Check if more pages remain
                     this.carouselHasMore.set(res.data.nextPage);
@@ -136,7 +136,7 @@ export class ServicesComponent extends BaseComponent implements OnInit {
 
     onGridPageChange(event: any): void {
         const page = Math.floor(event.first / this.gridPageSize) + 1;
-        this.gridPage.set(event.first);
+        this.gridPage.set(event.first);// اشرح دي بتاعت ايه 
         this.loadGridData(page);
     }
 

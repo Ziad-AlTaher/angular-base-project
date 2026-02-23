@@ -10,7 +10,7 @@
  */
 export interface ApiResponse<T> {
     isSuccess: boolean;
-    data: PaginatedData<T>;
+    data: T;
     errorMessage: string | null;
 }
 
