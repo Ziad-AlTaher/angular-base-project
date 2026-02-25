@@ -18,7 +18,7 @@ export class NavbarComponent extends BaseComponent {
   private themeService = inject(ThemeService);
   private translationService = inject(TranslationService);
 
-  isDarkMode = computed(() => this.themeService.theme() === 'dark');
+  // isDarkMode = computed(() => this.themeService.theme() === 'dark');
   currentLang = computed(() => this.translationService.currentLang());
   isSidebarOpen = false;
 

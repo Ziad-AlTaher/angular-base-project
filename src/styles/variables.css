@@ -61,7 +61,12 @@
     --gradient-accent: linear-gradient(135deg, var(--color-primary), var(--color-accent));
 }
 
-[data-theme="dark"] {
+/* ================================
+   Dark Mode Overrides
+   To re-enable, uncomment the block below.
+   ================================ */
+
+/* [data-theme="dark"] {
     --bg-primary: #0D0D0D;
     --bg-secondary: #1a1a1a;
     --bg-tertiary: #2a2a2a;
@@ -69,7 +74,7 @@
     --text-secondary: #A9D9D0;
     --text-muted: #7a7a7a;
 
-    /* Gradients */
+    Gradients:
     --gradient-primary: linear-gradient(135deg, #038C7F, #027373);
     --gradient-accent: linear-gradient(135deg, #027373, #A9D9D0);
-}
+} */

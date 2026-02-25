@@ -18,6 +18,12 @@ export const appConfig: ApplicationConfig = {
     providePrimeNG({
       theme: {
         preset: Aura,
+        options: {
+          // Disable automatic system dark mode detection.
+          // PrimeNG will only apply dark styles when the '.app-dark' class
+          // is added to the <html> element — which we control manually.
+          darkModeSelector: '.app-dark',
+        }
       },
     }),
   ]
