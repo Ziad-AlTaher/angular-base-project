@@ -84,7 +84,7 @@ export class ServicesComponent extends BaseComponent implements OnInit {
         if (this.carouselLoading() || !this.carouselHasMore()) return;
         this.carouselLoading.set(true);
 
-        this.bookService.getBooks(this.carouselPage, this.carouselPageSize)
+        this.bookService.getBooksSilently(this.carouselPage, this.carouselPageSize)
             .pipe(takeUntil(this.destroy$)) // اشرح دا 
             .subscribe({
                 next: (res) => {
@@ -118,7 +118,7 @@ export class ServicesComponent extends BaseComponent implements OnInit {
     loadGridData(page: number): void {
         this.gridLoading.set(true);
 
-        this.bookService.getBooks(page, this.gridPageSize)
+        this.bookService.getBooksSilently(page, this.gridPageSize)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (res) => {
@@ -145,7 +145,7 @@ export class ServicesComponent extends BaseComponent implements OnInit {
     loadGalleryData(): void {
         this.galleryLoading.set(true);
 
-        this.bookService.getBooks(1, 6)
+        this.bookService.getBooksSilently(1, 6)
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (res) => {

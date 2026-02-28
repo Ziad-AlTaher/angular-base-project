@@ -10,6 +10,7 @@
     --color-primary-light: #038C7F;
     --color-secondary: #038C7F;
     --color-accent: #A9D9D0;
+    --color-yellow: #fece4c;
     --color-warm: #F2E7DC;
     --color-dark: #0D0D0D;
     --color-success: #038C7F;
@@ -26,6 +27,12 @@
     --bg-primary: #ffffff;
     --bg-secondary: #F2E7DC;
     --bg-tertiary: #A9D9D0;
+    --bg-input: #f5f5f5;
+    --bg-input-hover: #f9f9f9;
+
+    /* Borders */
+    --border-light: #e8e8e8;
+    --border-color: #e0e0e0;
 
     /* Font sizes */
     --font-xs: 0.75rem;

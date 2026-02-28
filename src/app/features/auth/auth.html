@@ -1,0 +1,158 @@
+<div class="auth-container">
+    <!-- Left Panel — Gradient -->
+    <div class="auth-left">
+        <div class="auth-left__content">
+            <h1>{{ 'auth.welcome' | translate }}</h1>
+            <p>{{ 'auth.joinUs' | translate }}</p>
+        </div>
+    </div>
+
+    <!-- Right Panel — Form -->
+    <div class="auth-right">
+        <p-toast></p-toast>
+
+        <div class="auth-form-wrapper">
+            <h2 class="auth-heading">{{ 'auth.accessAccount' | translate }}</h2>
+
+            <!-- Tab Navigation -->
+            <div class="auth-tabs">
+                <button class="auth-tab" [class.active]="activeTab() === 'login'" (click)="switchTab('login')">
+                    {{ 'auth.login' | translate }}
+                </button>
+                <button class="auth-tab" [class.active]="activeTab() === 'register'" (click)="switchTab('register')">
+                    {{ 'auth.register' | translate }}
+                </button>
+            </div>
+
+            <!-- ═══════ Login Form ═══════ -->
+            @if (activeTab() === 'login') {
+            <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form">
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="login-email">{{ 'auth.email' | translate }}</label>
+                    <input pInputText id="login-email" formControlName="email" type="email" class="w-full auth-input"
+                        [class.ng-invalid]="lf['email'].invalid && (lf['email'].touched || submitted())"
+                        [class.ng-dirty]="lf['email'].touched || submitted()" />
+                    @if (lf['email'].invalid && (lf['email'].touched || submitted())) {
+                    <small class="error-msg">
+                        @if (lf['email'].errors?.['required']) {
+                        {{ 'validation.required' | translate }}
+                        } @else if (lf['email'].errors?.['email']) {
+                        {{ 'validation.email' | translate }}
+                        }
+                    </small>
+                    }
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="login-password">{{ 'auth.password' | translate }}</label>
+                    <p-password id="login-password" formControlName="password" [toggleMask]="true" [feedback]="false"
+                        styleClass="w-full" inputStyleClass="w-full auth-input"
+                        [class.ng-invalid]="lf['password'].invalid && (lf['password'].touched || submitted())"
+                        [class.ng-dirty]="lf['password'].touched || submitted()">
+                    </p-password>
+                    @if (lf['password'].invalid && (lf['password'].touched || submitted())) {
+                    <small class="error-msg">
+                        @if (lf['password'].errors?.['required']) {
+                        {{ 'validation.required' | translate }}
+                        } @else if (lf['password'].errors?.['minlength']) {
+                        {{ 'validation.minLength' | translate }} (6)
+                        }
+                    </small>
+                    }
+                </div>
+
+                <!-- Submit -->
+                <p-button type="submit" [label]="(isLoading ? 'common.loading' : 'auth.loginBtn') | translate"
+                    icon="pi pi-sign-in" [loading]="isLoading" styleClass="w-full auth-submit-btn" severity="primary"
+                    [disabled]="isLoading">
+                </p-button>
+            </form>
+            }
+
+            <!-- ═══════ Register Form ═══════ -->
+            @if (activeTab() === 'register') {
+            <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="auth-form">
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label for="reg-name">{{ 'auth.fullName' | translate }}</label>
+                    <input pInputText id="reg-name" formControlName="fullName" type="text" class="w-full auth-input"
+                        [class.ng-invalid]="rf['fullName'].invalid && (rf['fullName'].touched || submitted())"
+                        [class.ng-dirty]="rf['fullName'].touched || submitted()" />
+                    @if (rf['fullName'].invalid && (rf['fullName'].touched || submitted())) {
+                    <small class="error-msg">
+                        @if (rf['fullName'].errors?.['required']) {
+                        {{ 'validation.required' | translate }}
+                        } @else if (rf['fullName'].errors?.['minlength']) {
+                        {{ 'validation.minLength' | translate }} (2)
+                        } @else if (rf['fullName'].errors?.['maxlength']) {
+                        {{ 'validation.maxLength' | translate }} (50)
+                        }
+                    </small>
+                    }
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="reg-email">{{ 'auth.email' | translate }}</label>
+                    <input pInputText id="reg-email" formControlName="email" type="email" class="w-full auth-input"
+                        [class.ng-invalid]="rf['email'].invalid && (rf['email'].touched || submitted())"
+                        [class.ng-dirty]="rf['email'].touched || submitted()" />
+                    @if (rf['email'].invalid && (rf['email'].touched || submitted())) {
+                    <small class="error-msg">
+                        @if (rf['email'].errors?.['required']) {
+                        {{ 'validation.required' | translate }}
+                        } @else if (rf['email'].errors?.['email']) {
+                        {{ 'validation.email' | translate }}
+                        }
+                    </small>
+                    }
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="reg-password">{{ 'auth.password' | translate }}</label>
+                    <p-password id="reg-password" formControlName="password" [toggleMask]="true" [feedback]="false"
+                        styleClass="w-full" inputStyleClass="w-full auth-input"
+                        [class.ng-invalid]="rf['password'].invalid && (rf['password'].touched || submitted())"
+                        [class.ng-dirty]="rf['password'].touched || submitted()">
+                    </p-password>
+                    @if (rf['password'].invalid && (rf['password'].touched || submitted())) {
+                    <small class="error-msg">
+                        @if (rf['password'].errors?.['required']) {
+                        {{ 'validation.required' | translate }}
+                        } @else if (rf['password'].errors?.['minlength']) {
+                        {{ 'validation.minLength' | translate }} (6)
+                        }
+                    </small>
+                    }
+                </div>
+
+                <!-- Submit -->
+                <p-button type="submit" [label]="(isLoading ? 'common.loading' : 'auth.registerBtn') | translate"
+                    icon="pi pi-user-plus" [loading]="isLoading" styleClass="w-full auth-submit-btn" severity="primary"
+                    [disabled]="isLoading">
+                </p-button>
+            </form>
+            }
+
+            <!-- Social Login Divider -->
+            <div class="social-divider">
+                <span>{{ 'auth.orContinue' | translate }}</span>
+            </div>
+
+            <!-- Social Login Buttons -->
+            <div class="social-buttons">
+                <button class="social-btn google-btn" (click)="loginWithGoogle()">
+                    <i class="pi pi-google"></i>
+                    {{ 'auth.google' | translate }}
+                </button>
+                <button class="social-btn github-btn" (click)="loginWithGitHub()">
+                    <i class="pi pi-github"></i>
+                    {{ 'auth.github' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

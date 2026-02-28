@@ -2,7 +2,10 @@
     "navbar": {
         "home": "Home",
         "services": "Our Services",
-        "contact": "Contact Us"
+        "contact": "Contact Us",
+        "login": "Login",
+        "logout": "Logout",
+        "account": "Account"
     },
     "footer": {
         "about": "We build amazing digital experiences that help your business grow.",
@@ -67,6 +70,26 @@
         },
         "success": "Your message has been sent successfully!",
         "error": "Failed to send message. Please try again."
+    },
+    "auth": {
+        "welcome": "Welcome",
+        "joinUs": "Join Us",
+        "accessAccount": "Access Your Account",
+        "login": "Login",
+        "register": "Register",
+        "fullName": "Full Name",
+        "email": "Email",
+        "password": "Password",
+        "loginBtn": "Sign In",
+        "registerBtn": "Create Account",
+        "orContinue": "Or continue with",
+        "google": "Google",
+        "github": "GitHub",
+        "loginSuccess": "Welcome back!",
+        "registerSuccess": "Account created successfully!",
+        "invalidCredentials": "Invalid email or password",
+        "emailExists": "Email already registered",
+        "comingSoon": "Coming soon!"
     },
     "validation": {
         "required": "This field is required",

@@ -39,6 +39,20 @@
                 <p-button [text]="true" [rounded]="true" (onClick)="toggleLanguage()"
                     [label]="currentLang() === 'en' ? 'عربي' : 'English'">
                 </p-button>
+
+                <!-- Auth Buttons -->
+                @if (!isLoggedIn()) {
+                <p-button [text]="true" [rounded]="true" (onClick)="goToAuth()" icon="pi pi-sign-in"
+                    [attr.aria-label]="'navbar.login' | translate">
+                </p-button>
+                } @else {
+                <p-button [text]="true" [rounded]="true" icon="pi pi-user"
+                    [attr.aria-label]="'navbar.account' | translate">
+                </p-button>
+                <p-button [text]="true" [rounded]="true" (onClick)="logout()" icon="pi pi-sign-out" severity="danger"
+                    [attr.aria-label]="'navbar.logout' | translate">
+                </p-button>
+                }
             </div>
         </div>
     </div>

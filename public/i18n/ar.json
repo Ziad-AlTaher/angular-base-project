@@ -2,7 +2,10 @@
     "navbar": {
         "home": "الرئيسية",
         "services": "خدماتنا",
-        "contact": "اتصل بنا"
+        "contact": "اتصل بنا",
+        "login": "تسجيل الدخول",
+        "logout": "تسجيل الخروج",
+        "account": "الحساب"
     },
     "footer": {
         "about": "نبني تجارب رقمية مذهلة تساعد عملك على النمو.",
@@ -67,6 +70,26 @@
         },
         "success": "تم إرسال رسالتك بنجاح!",
         "error": "فشل في إرسال الرسالة. يرجى المحاولة مرة أخرى."
+    },
+    "auth": {
+        "welcome": "مرحباً",
+        "joinUs": "انضم إلينا",
+        "accessAccount": "الوصول إلى حسابك",
+        "login": "تسجيل الدخول",
+        "register": "إنشاء حساب",
+        "fullName": "الاسم الكامل",
+        "email": "البريد الإلكتروني",
+        "password": "كلمة المرور",
+        "loginBtn": "تسجيل الدخول",
+        "registerBtn": "إنشاء حساب",
+        "orContinue": "أو تابع باستخدام",
+        "google": "Google",
+        "github": "GitHub",
+        "loginSuccess": "مرحباً بعودتك!",
+        "registerSuccess": "تم إنشاء الحساب بنجاح!",
+        "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+        "emailExists": "البريد الإلكتروني مسجل بالفعل",
+        "comingSoon": "قريباً!"
     },
     "validation": {
         "required": "هذا الحقل مطلوب",
