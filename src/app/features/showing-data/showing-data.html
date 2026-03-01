@@ -1,0 +1,264 @@
+<section class="showing-data-page">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">{{ 'showingData.title' | translate }}</h1>
+            <p class="page-subtitle">{{ 'showingData.subtitle' | translate }}</p>
+        </div>
+        <div class="header-decoration"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- Section 1: Client-Side Data Table                      -->
+    <!-- All data loaded once, PrimeNG handles sort & filter    -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="data-section">
+        <div class="section-header">
+            <h2 class="section-title">{{ 'showingData.clientTableTitle' | translate }}</h2>
+            <div class="section-divider"></div>
+            <p class="section-description">{{ 'showingData.clientTableDesc' | translate }}</p>
+        </div>
+
+        <div class="table-card">
+            <!-- Global search input -->
+            <div class="table-toolbar">
+                <p-iconfield iconPosition="left">
+                    <p-inputicon styleClass="pi pi-search" />
+                    <input pInputText type="text" [placeholder]="'showingData.searchPlaceholder' | translate"
+                        (input)="onClientGlobalFilter(clientTable, $event)" class="table-search-input" />
+                </p-iconfield>
+            </div>
+
+            <!-- Client-side table with built-in sort & filter -->
+            @if (clientTableLoading()) {
+            <!-- Skeleton loading state -->
+            <div class="skeleton-table">
+                <div class="skeleton-header">
+                    @for (col of skeletonCols; track $index) {
+                    <p-skeleton width="100%" height="1.25rem" />
+                    }
+                </div>
+                @for (row of skeletonRows; track $index) {
+                <div class="skeleton-row">
+                    @for (col of skeletonCols; track $index) {
+                    <p-skeleton width="100%" height="1rem" />
+                    }
+                </div>
+                }
+            </div>
+            } @else {
+            <p-table #clientTable [value]="clientBooks()" [paginator]="true" [rows]="5"
+                [rowsPerPageOptions]="[5, 10, 25]"
+                [globalFilterFields]="['title', 'author', 'publisher', 'categoryNameEn', 'categoryNameAr']"
+                [sortMode]="'single'" [showCurrentPageReport]="true"
+                styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm"
+                [tableStyle]="{ 'min-width': '50rem' }" responsiveLayout="scroll">
+
+                <ng-template #header>
+                    <tr>
+                        <th pSortableColumn="title">
+                            {{ 'showingData.colTitle' | translate }}
+                            <p-sortIcon field="title" />
+                        </th>
+                        <th pSortableColumn="author">
+                            {{ 'showingData.colAuthor' | translate }}
+                            <p-sortIcon field="author" />
+                        </th>
+                        <th pSortableColumn="publisher">
+                            {{ 'showingData.colPublisher' | translate }}
+                            <p-sortIcon field="publisher" />
+                        </th>
+                        <th>
+                            {{ 'showingData.colCategory' | translate }}
+                        </th>
+                        <th pSortableColumn="viewCount">
+                            {{ 'showingData.colViews' | translate }}
+                            <p-sortIcon field="viewCount" />
+                        </th>
+                        <th pSortableColumn="downloadCount">
+                            {{ 'showingData.colDownloads' | translate }}
+                            <p-sortIcon field="downloadCount" />
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template #body let-book>
+                    <tr>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.publisher }}</td>
+                        <td>
+                            <span class="category-badge">{{ getCategoryName(book) }}</span>
+                        </td>
+                        <td>
+                            <span class="stat-chip views">
+                                <i class="pi pi-eye"></i>
+                                {{ book.viewCount }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="stat-chip downloads">
+                                <i class="pi pi-download"></i>
+                                {{ book.downloadCount }}
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template #emptymessage>
+                    <tr>
+                        <td colspan="6" class="empty-message">
+                            <i class="pi pi-inbox"></i>
+                            {{ 'showingData.noData' | translate }}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            }
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- Section 2: Server-Side Data Table (Lazy Loading)       -->
+    <!-- Each page/sort/filter triggers a new API call          -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="data-section section-alt">
+        <div class="section-header">
+            <h2 class="section-title">{{ 'showingData.serverTableTitle' | translate }}</h2>
+            <div class="section-divider"></div>
+            <p class="section-description">{{ 'showingData.serverTableDesc' | translate }}</p>
+        </div>
+
+        <div class="table-card">
+            @if (serverTableLoading() && serverBooks().length === 0) {
+            <!-- Skeleton loading state for initial load -->
+            <div class="skeleton-table">
+                <div class="skeleton-header">
+                    @for (col of skeletonCols; track $index) {
+                    <p-skeleton width="100%" height="1.25rem" />
+                    }
+                </div>
+                @for (row of skeletonRows; track $index) {
+                <div class="skeleton-row">
+                    @for (col of skeletonCols; track $index) {
+                    <p-skeleton width="100%" height="1rem" />
+                    }
+                </div>
+                }
+            </div>
+            } @else {
+            <!--
+                Server-side p-table with lazy loading.
+
+                How it works:
+                - [lazy]="true" tells PrimeNG NOT to sort/filter/paginate locally.
+                - Instead, it fires (onLazyLoad) with a TableLazyLoadEvent object.
+                - We extract pagination, sort, and filter params from the event
+                  and send them to the API as HTTP query parameters.
+
+                The TableLazyLoadEvent contains:
+                  event.first      → 0-based row offset (e.g., 0, 10, 20)
+                  event.rows       → page size (e.g., 10)
+                  event.sortField  → column key to sort by (e.g., 'title')
+                  event.sortOrder  → 1 for ASC, -1 for DESC
+                  event.filters    → { columnField: { value, matchMode } }
+
+                See showing-data.ts for the full conversion logic.
+            -->
+            <p-table [value]="serverBooks()" [lazy]="true" [paginator]="true" [rows]="serverPageSize"
+                [totalRecords]="serverTotalRecords()" [loading]="serverTableLoading()"
+                (onLazyLoad)="onServerLazyLoad($event)" [sortMode]="'single'" [showCurrentPageReport]="true"
+                styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm"
+                [tableStyle]="{ 'min-width': '50rem' }" responsiveLayout="scroll">
+
+                <ng-template #header>
+                    <tr>
+                        <th pSortableColumn="title">
+                            {{ 'showingData.colTitle' | translate }}
+                            <p-sortIcon field="title" />
+                        </th>
+                        <th pSortableColumn="author">
+                            {{ 'showingData.colAuthor' | translate }}
+                            <p-sortIcon field="author" />
+                        </th>
+                        <th pSortableColumn="publisher">
+                            {{ 'showingData.colPublisher' | translate }}
+                            <p-sortIcon field="publisher" />
+                        </th>
+                        <th>
+                            {{ 'showingData.colCategory' | translate }}
+                        </th>
+                        <th pSortableColumn="viewCount">
+                            {{ 'showingData.colViews' | translate }}
+                            <p-sortIcon field="viewCount" />
+                        </th>
+                        <th pSortableColumn="downloadCount">
+                            {{ 'showingData.colDownloads' | translate }}
+                            <p-sortIcon field="downloadCount" />
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template #body let-book>
+                    <tr>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.publisher }}</td>
+                        <td>
+                            <span class="category-badge">{{ getCategoryName(book) }}</span>
+                        </td>
+                        <td>
+                            <span class="stat-chip views">
+                                <i class="pi pi-eye"></i>
+                                {{ book.viewCount }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="stat-chip downloads">
+                                <i class="pi pi-download"></i>
+                                {{ book.downloadCount }}
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template #emptymessage>
+                    <tr>
+                        <td colspan="6" class="empty-message">
+                            <i class="pi pi-inbox"></i>
+                            {{ 'showingData.noData' | translate }}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            }
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- Section 3: Chart (ApexCharts — Views vs Downloads)     -->
+    <!-- Uses spinner loading instead of skeleton               -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <section class="data-section">
+        <div class="section-header">
+            <h2 class="section-title">{{ 'showingData.chartTitle' | translate }}</h2>
+            <div class="section-divider"></div>
+            <p class="section-description">{{ 'showingData.chartDesc' | translate }}</p>
+        </div>
+
+        <div class="chart-card">
+            @if (chartLoading()) {
+            <div class="chart-spinner">
+                <p-progressSpinner strokeWidth="3" [style]="{ width: '4rem', height: '4rem' }" />
+                <span class="spinner-text">{{ 'common.loading' | translate }}</span>
+            </div>
+            } @else if (chartOptions()) {
+            <apx-chart [series]="chartOptions()!.series" [chart]="chartOptions()!.chart" [xaxis]="chartOptions()!.xaxis"
+                [yaxis]="chartOptions()!.yaxis" [dataLabels]="chartOptions()!.dataLabels"
+                [plotOptions]="chartOptions()!.plotOptions" [legend]="chartOptions()!.legend"
+                [tooltip]="chartOptions()!.tooltip" [fill]="chartOptions()!.fill" [grid]="chartOptions()!.grid"
+                [stroke]="chartOptions()!.stroke" [responsive]="chartOptions()!.responsive" />
+            }
+        </div>
+    </section>
+</section>

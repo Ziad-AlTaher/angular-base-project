@@ -1,0 +1,301 @@
+/* ═════════════════════════════════════════════
+   Showing Data Page
+   ═════════════════════════════════════════════ */
+
+.showing-data-page {
+    min-height: 100vh;
+    background: var(--bg-primary);
+}
+
+/* ── Page Header ── */
+
+.page-header {
+    position: relative;
+    background: var(--gradient-primary);
+    padding: 5rem 1.5rem 3rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.header-content {
+    position: relative;
+    z-index: 1;
+    max-width: 50rem;
+    margin: 0 auto;
+}
+
+.page-title {
+    color: var(--text-on-primary);
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0 0 0.75rem;
+    letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: var(--font-lg);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.header-decoration {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 3rem;
+    background: var(--bg-primary);
+    clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+/* ── Sections ── */
+
+.data-section {
+    padding: 3rem 1.5rem;
+    max-width: 80rem;
+    margin: 0 auto;
+}
+
+.data-section.section-alt {
+    background: var(--bg-secondary);
+    max-width: 100%;
+    padding: 3rem calc((100% - 80rem) / 2 + 1.5rem);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: var(--font-2xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.75rem;
+}
+
+.section-divider {
+    width: 4rem;
+    height: 0.25rem;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-full);
+    margin: 0 auto 1rem;
+}
+
+.section-description {
+    color: var(--text-muted);
+    font-size: var(--font-sm);
+    margin: 0;
+    max-width: 40rem;
+    margin-inline: auto;
+    line-height: 1.6;
+}
+
+/* ── Table Card Container ── */
+
+.table-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    /* overflow: hidden; */
+    border: 1px solid rgba(2, 115, 115, 0.08);
+}
+
+.table-toolbar {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid rgba(2, 115, 115, 0.06);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.table-search-input {
+    width: 100%;
+    max-width: 20rem;
+}
+
+/* ── Category Badge ── */
+
+.category-badge {
+    display: inline-block;
+    background: var(--gradient-accent);
+    color: var(--text-on-primary);
+    font-size: var(--font-xs);
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+}
+
+/* ── Stat Chips ── */
+
+.stat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: var(--font-sm);
+    font-weight: 500;
+    padding: 0.125rem 0.5rem;
+    border-radius: var(--radius-full);
+}
+
+.stat-chip.views {
+    color: var(--color-primary);
+    background: rgba(2, 115, 115, 0.08);
+}
+
+.stat-chip.downloads {
+    color: var(--color-warning);
+    background: rgba(230, 126, 34, 0.08);
+}
+
+.stat-chip i {
+    font-size: 0.75rem;
+}
+
+/* ── Skeleton Table Loading ── */
+
+.skeleton-table {
+    padding: var(--spacing-lg);
+}
+
+.skeleton-header {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid rgba(2, 115, 115, 0.08);
+    margin-bottom: var(--spacing-md);
+}
+
+.skeleton-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid rgba(2, 115, 115, 0.04);
+}
+
+/* ── Chart Card ── */
+
+.chart-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-xl);
+    border: 1px solid rgba(2, 115, 115, 0.08);
+    min-height: 25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.spinner-text {
+    color: var(--text-muted);
+    font-size: var(--font-sm);
+    font-weight: 500;
+}
+
+/* Make chart fill its container */
+.chart-card apx-chart {
+    width: 100%;
+}
+
+/* ── Empty message ── */
+
+.empty-message {
+    text-align: center;
+    padding: 2rem 1rem !important;
+    color: var(--text-muted);
+    font-size: var(--font-base);
+}
+
+.empty-message i {
+    display: block;
+    font-size: 2rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* ── Paginator RTL & Sizing Fixes ── */
+
+/* Numbers and navigation arrows should always read LTR, even in Arabic */
+:host ::ng-deep .p-paginator {
+    direction: ltr;
+}
+
+/* Ensure the rows-per-page dropdown has a comfortable width */
+:host ::ng-deep .p-paginator .p-select {
+    min-width: 5rem;
+}
+
+/* Show all dropdown options without requiring scroll */
+:host ::ng-deep .p-paginator .p-select-overlay .p-select-list-container {
+    max-height: none;
+}
+
+/* ═════════════════════════════════════════════
+   Responsive
+   ═════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 1.875rem;
+    }
+
+    .data-section {
+        padding: 2rem 1rem;
+    }
+
+    .data-section.section-alt {
+        padding: 2rem 1rem;
+    }
+
+    .table-toolbar {
+        padding: var(--spacing-md);
+    }
+
+    .table-search-input {
+        max-width: 100%;
+    }
+
+    .skeleton-header,
+    .skeleton-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .chart-card {
+        padding: var(--spacing-md);
+        min-height: 18rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-header {
+        padding: 4rem 1rem 2.5rem;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+    }
+
+    .skeleton-header,
+    .skeleton-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

@@ -3,6 +3,7 @@
         "home": "Home",
         "services": "Our Services",
         "contact": "Contact Us",
+        "showingData": "Data Explorer",
         "login": "Login",
         "logout": "Logout",
         "account": "Account"
@@ -50,6 +51,27 @@
         "translator": "Translator",
         "category": "Category",
         "description": "Description"
+    },
+    "showingData": {
+        "title": "Data Explorer",
+        "subtitle": "Browse, filter, sort, and visualize book data with interactive tables and charts.",
+        "clientTableTitle": "Client-Side Data Table",
+        "clientTableDesc": "All data is loaded once. Sorting and filtering happen locally in the browser.",
+        "serverTableTitle": "Server-Side Data Table",
+        "serverTableDesc": "Each page change, sort, or filter triggers a new request to the server.",
+        "chartTitle": "Views vs Downloads",
+        "chartDesc": "A bar chart comparing view counts and download counts for the top books.",
+        "chartYAxis": "Count",
+        "searchPlaceholder": "Search across all columns...",
+        "colTitle": "Title",
+        "colAuthor": "Author",
+        "colPublisher": "Publisher",
+        "colCategory": "Category",
+        "colViews": "Views",
+        "colDownloads": "Downloads",
+        "noData": "No data available.",
+        "views": "Views",
+        "downloads": "Downloads"
     },
     "contact": {
         "title": "Get In Touch",

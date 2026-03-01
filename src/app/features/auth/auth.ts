@@ -1,7 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BaseComponent } from '../../core/base/base.component';
 import { TranslatePipe } from '../../core/pipes/translate.pipe';
 import { AuthService } from '../../core/services/auth.service';
@@ -29,14 +29,23 @@ import { takeUntil } from 'rxjs';
     templateUrl: './auth.html',
     styleUrl: './auth.css'
 })
-export class Auth extends BaseComponent {
+export class Auth extends BaseComponent implements OnInit {
     private fb = inject(FormBuilder);
     private authService = inject(AuthService);
     private messageService = inject(MessageService);
     private router = inject(Router);
+    private route = inject(ActivatedRoute);
+
+    /** URL to redirect to after successful login (set by authGuard) */
+    private returnUrl: string = '/';
 
     activeTab = signal<'login' | 'register'>('login');
     submitted = signal(false);
+
+    ngOnInit(): void {
+        // Read the returnUrl query param passed by the auth guard
+        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    }
 
     /** Login form */
     loginForm: FormGroup = this.fb.group({
@@ -82,7 +91,7 @@ export class Auth extends BaseComponent {
                         detail: 'Welcome back!',
                         life: 3000
                     });
-                    setTimeout(() => this.router.navigate(['/']), 800);
+                    setTimeout(() => this.router.navigateByUrl(this.returnUrl), 800);
                 },
                 error: (err) => {
                     this.isLoading = false;
@@ -119,7 +128,7 @@ export class Auth extends BaseComponent {
                         detail: 'Account created successfully!',
                         life: 3000
                     });
-                    setTimeout(() => this.router.navigate(['/']), 800);
+                    setTimeout(() => this.router.navigateByUrl(this.returnUrl), 800);
                 },
                 error: (err) => {
                     this.isLoading = false;

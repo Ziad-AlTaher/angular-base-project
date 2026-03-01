@@ -29,6 +29,13 @@
                 <li class="nav-item">
                     <a routerLink="/contact" (click)="closeSidebar()">{{ 'navbar.contact' | translate }}</a>
                 </li>
+                @if (isLoggedIn()) {
+                <li class="nav-item">
+                    <a routerLink="/showing-data" routerLinkActive="active" (click)="closeSidebar()">
+                        {{ 'navbar.showingData' | translate }}
+                    </a>
+                </li>
+                }
             </ul>
 
             <div class="navbar-actions">
