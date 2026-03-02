@@ -1,0 +1,194 @@
+<section class="book-form-page">
+
+    <!-- Page Header -->
+    <div class="form-header">
+        <div class="header-content">
+            <button class="back-btn" (click)="onCancel()">
+                <i class="pi pi-arrow-left"></i>
+            </button>
+            <div class="header-text">
+                <h1 class="page-title">
+                    {{ (isEditMode() ? 'bookForm.editTitle' : 'bookForm.addTitle') | translate }}
+                </h1>
+                <p class="page-subtitle">{{ 'bookForm.subtitle' | translate }}</p>
+            </div>
+        </div>
+        <div class="header-decoration"></div>
+    </div>
+
+    <!-- Toast -->
+    <p-toast position="top-center" />
+
+    <!-- Page Loading -->
+    @if (pageLoading()) {
+    <div class="form-loading">
+        <p-progressSpinner strokeWidth="3" [style]="{ width: '3.5rem', height: '3.5rem' }" />
+        <span class="loading-text">{{ 'common.loading' | translate }}</span>
+    </div>
+    } @else {
+
+    <!-- Form Card -->
+    <div class="form-container">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+            <!-- ── Section: Basic Info ── -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="pi pi-book"></i>
+                    {{ 'bookForm.sectionBasic' | translate }}
+                </h2>
+                <div class="form-grid">
+
+                    <!-- Title -->
+                    <div class="field field--full">
+                        <label class="field-label required" for="title">
+                            {{ 'bookForm.title' | translate }}
+                        </label>
+                        <input id="title" pInputText formControlName="title"
+                            [placeholder]="'bookForm.titlePlaceholder' | translate"
+                            [class.ng-invalid]="hasError('title', 'required')" />
+                        @if (hasError('title', 'required')) {
+                        <small class="field-error">{{ 'bookForm.required' | translate }}</small>
+                        }
+                    </div>
+
+                    <!-- Author -->
+                    <div class="field">
+                        <label class="field-label required" for="author">
+                            {{ 'bookForm.author' | translate }}
+                        </label>
+                        <input id="author" pInputText formControlName="author"
+                            [placeholder]="'bookForm.authorPlaceholder' | translate"
+                            [class.ng-invalid]="hasError('author', 'required')" />
+                        @if (hasError('author', 'required')) {
+                        <small class="field-error">{{ 'bookForm.required' | translate }}</small>
+                        }
+                    </div>
+
+                    <!-- Translator -->
+                    <div class="field">
+                        <label class="field-label" for="translator">
+                            {{ 'bookForm.translator' | translate }}
+                        </label>
+                        <input id="translator" pInputText formControlName="translator"
+                            [placeholder]="'bookForm.translatorPlaceholder' | translate" />
+                    </div>
+
+                    <!-- Publisher -->
+                    <div class="field">
+                        <label class="field-label" for="publisher">
+                            {{ 'bookForm.publisher' | translate }}
+                        </label>
+                        <input id="publisher" pInputText formControlName="publisher"
+                            [placeholder]="'bookForm.publisherPlaceholder' | translate" />
+                    </div>
+
+                    <!-- Category -->
+                    <div class="field">
+                        <label class="field-label required" for="categoryId">
+                            {{ 'bookForm.category' | translate }}
+                        </label>
+                        <p-select id="categoryId" formControlName="categoryId" [options]="categoryOptions"
+                            optionLabel="label" optionValue="value"
+                            [placeholder]="'bookForm.categoryPlaceholder' | translate"
+                            [class.ng-invalid]="hasError('categoryId', 'required')" styleClass="w-full" />
+                        @if (hasError('categoryId', 'required')) {
+                        <small class="field-error">{{ 'bookForm.required' | translate }}</small>
+                        }
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ── Section: Languages ── -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="pi pi-language"></i>
+                    {{ 'bookForm.sectionLanguages' | translate }}
+                </h2>
+                <div class="form-grid">
+
+                    <!-- Source Language -->
+                    <div class="field">
+                        <label class="field-label" for="sourceLang">
+                            {{ 'bookForm.sourceLang' | translate }}
+                        </label>
+                        <input id="sourceLang" pInputText formControlName="sourceLang"
+                            [placeholder]="'bookForm.sourceLangPlaceholder' | translate" />
+                    </div>
+
+                    <!-- Target Language -->
+                    <div class="field">
+                        <label class="field-label" for="targetLang">
+                            {{ 'bookForm.targetLang' | translate }}
+                        </label>
+                        <input id="targetLang" pInputText formControlName="targetLang"
+                            [placeholder]="'bookForm.targetLangPlaceholder' | translate" />
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ── Section: Links & Assets ── -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="pi pi-link"></i>
+                    {{ 'bookForm.sectionLinks' | translate }}
+                </h2>
+                <div class="form-grid">
+
+                    <!-- Image URL -->
+                    <div class="field">
+                        <label class="field-label" for="imageUrl">
+                            {{ 'bookForm.imageUrl' | translate }}
+                        </label>
+                        <input id="imageUrl" pInputText formControlName="imageUrl"
+                            [placeholder]="'bookForm.imageUrlPlaceholder' | translate" />
+                    </div>
+
+                    <!-- Download Link -->
+                    <div class="field">
+                        <label class="field-label" for="downloadLink">
+                            {{ 'bookForm.downloadLink' | translate }}
+                        </label>
+                        <input id="downloadLink" pInputText formControlName="downloadLink"
+                            [placeholder]="'bookForm.downloadLinkPlaceholder' | translate" />
+                    </div>
+
+                    <!-- Out Source -->
+                    <div class="field field--checkbox">
+                        <p-checkbox formControlName="outSource" [binary]="true" inputId="outSource" />
+                        <label for="outSource" class="field-label checkbox-label">
+                            {{ 'bookForm.outSource' | translate }}
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ── Section: Description ── -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <i class="pi pi-align-left"></i>
+                    {{ 'bookForm.sectionDescription' | translate }}
+                </h2>
+                <div class="field field--full">
+                    <textarea pTextarea formControlName="description" rows="8"
+                        [placeholder]="'bookForm.descriptionPlaceholder' | translate"
+                        style="width: 100%; resize: vertical;"></textarea>
+                </div>
+            </div>
+
+            <!-- ── Form Actions ── -->
+            <div class="form-actions">
+                <p-button type="button" [label]="'common.cancel' | translate" icon="pi pi-times" severity="secondary"
+                    [outlined]="true" (onClick)="onCancel()" />
+                <p-button type="submit" [label]="(isEditMode() ? 'bookForm.update' : 'bookForm.create') | translate"
+                    [icon]="isEditMode() ? 'pi pi-check' : 'pi pi-plus'" [loading]="submitting()" />
+            </div>
+
+        </form>
+    </div>
+    }
+
+</section>

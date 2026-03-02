@@ -17,6 +17,14 @@
     overflow: hidden;
 }
 
+.header-actions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    margin-top: var(--spacing-md);
+}
+
 .page-header::before {
     content: '';
     position: absolute;
@@ -230,6 +238,22 @@
     display: block;
     font-size: 2rem;
     margin-bottom: var(--spacing-sm);
+}
+
+/* ── Actions Column ── */
+
+.actions-col {
+    width: 5rem;
+    text-align: center;
+}
+
+/* Danger (delete) menu item */
+:host ::ng-deep .p-menu .danger-item .p-menuitem-content {
+    color: var(--color-danger) !important;
+}
+
+:host ::ng-deep .p-menu .danger-item .p-menuitem-content .p-menuitem-icon {
+    color: var(--color-danger) !important;
 }
 
 /* ── Paginator RTL & Sizing Fixes ── */

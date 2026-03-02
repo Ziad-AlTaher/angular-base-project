@@ -15,6 +15,12 @@ export class TranslationService {
     currentLang = signal<Language>('ar');
     translations = signal<any>({});
 
+    /**
+     * In-memory cache: once a language file is fetched it is stored here
+     * so subsequent switches to the same language are instant (no HTTP call).
+     */
+    private cache: Partial<Record<Language, any>> = {};
+
     constructor() {
         this.initLanguage();
     }
@@ -56,12 +62,22 @@ export class TranslationService {
     }
 
     private loadTranslations(lang: Language): void {
-        if (isPlatformBrowser(this.platformId)) {
-            this.http.get(`../../../../public/i18n/${lang}.json`).subscribe({
-                next: (data) => this.translations.set(data),
-                error: (err) => console.error('Failed to load translations:', err)
-            });
+        if (!isPlatformBrowser(this.platformId)) return;
+
+        // ── Cache hit: apply immediately, skip the network request ──
+        if (this.cache[lang]) {
+            this.translations.set(this.cache[lang]);
+            return;
         }
+
+        // ── Cache miss: fetch once and store for future switches ──
+        this.http.get(`../../../../public/i18n/${lang}.json`).subscribe({
+            next: (data) => {
+                this.cache[lang] = data;
+                this.translations.set(data);
+            },
+            error: (err) => console.error('Failed to load translations:', err)
+        });
     }
 
     private updateDirection(lang: Language): void {
@@ -71,3 +87,4 @@ export class TranslationService {
         htmlElement.setAttribute('lang', lang);
     }
 }
+

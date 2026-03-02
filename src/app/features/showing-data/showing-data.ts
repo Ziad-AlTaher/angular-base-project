@@ -2,6 +2,7 @@ import { Component, OnInit, inject, computed, signal, PLATFORM_ID, Inject, ViewC
 import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { BaseComponent } from '../../core/base/base.component';
 import { BookService } from '../../core/services/book.service';
 import { TranslationService } from '../../core/services/translation.service';
@@ -16,6 +17,11 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { ButtonModule } from 'primeng/button';
+import { MenuModule, Menu } from 'primeng/menu';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { MenuItem, MessageService, ConfirmationService } from 'primeng/api';
 
 // ApexCharts
 import { NgApexchartsModule } from 'ng-apexcharts';
@@ -63,48 +69,91 @@ export interface ChartOptions {
         InputTextModule,
         IconFieldModule,
         InputIconModule,
+        ButtonModule,
+        MenuModule,
+        ToastModule,
+        ConfirmDialogModule,
         NgApexchartsModule
     ],
+    providers: [MessageService, ConfirmationService],
     templateUrl: './showing-data.html',
     styleUrl: './showing-data.css'
 })
 export class ShowingDataComponent extends BaseComponent implements OnInit {
     private bookService = inject(BookService);
     private translationService = inject(TranslationService);
+    private router = inject(Router);
+    private messageService = inject(MessageService);
+    private confirmationService = inject(ConfirmationService);
 
     currentLang = computed(() => this.translationService.currentLang());
 
     // ─── Client-side table state ─────────────────────────────────
     clientBooks = signal<Book[]>([]);
     clientTableLoading = signal(true);
-    clientFilterValue = '';
 
-    // Template reference for the client-side table (used for global filtering)
-    @ViewChild('clientTable') clientTable!: Table; // what is this do? answer : it is used to get the reference to the client-side table
+    @ViewChild('clientTable') clientTable!: Table;
 
     // ─── Server-side table state ─────────────────────────────────
     serverBooks = signal<Book[]>([]);
-    serverTableLoading = signal(true);
+    // Must start as false so the p-table mounts immediately and fires (onLazyLoad).
+    // If set to true, the skeleton hides the table → onLazyLoad never triggers → data never loads.
+    serverTableLoading = signal(false);
     serverTotalRecords = signal(0);
     readonly serverPageSize = 10;
 
     // ─── Chart state ─────────────────────────────────────────────
     chartLoading = signal(true);
     chartOptions = signal<ChartOptions | null>(null);
-    private isBrowser: boolean; // what is this do? answer : it is used to check if the component is running in the browser it benefit us to prevent the error of running the code in the server
+    private isBrowser: boolean;
 
     // Skeleton placeholder rows for table loading state
     skeletonRows = Array(5).fill({});
     skeletonCols = Array(6).fill({});
 
-    constructor(@Inject(PLATFORM_ID) platformId: Object) { // what is this do? what is platformId? answer : it is used to check if the component is running in the browser it benefit us to prevent the error of running the code in the server
+    // ─── Actions ─────────────────────────────────────────────────
+    /** The book that was right-clicked in the actions menu */
+    private selectedBook = signal<Book | null>(null);
+
+    /** Menu items built dynamically (translations must be reactive) */
+    actionMenuItems = computed<MenuItem[]>(() => [
+        {
+            label: this.translationService.translate('showingData.actions.edit'),
+            icon: 'pi pi-pencil',
+            command: () => {
+                const book = this.selectedBook();
+                if (book) this.onEdit(book);
+            }
+        },
+        {
+            label: this.translationService.translate('showingData.actions.delete'),
+            icon: 'pi pi-trash',
+            styleClass: 'danger-item',
+            command: () => {
+                const book = this.selectedBook();
+                if (book) this.onDelete(book);
+            }
+        },
+        { separator: true },
+        {
+            label: this.translationService.translate('showingData.actions.add'),
+            icon: 'pi pi-plus-circle',
+            command: () => this.onAdd()
+        }
+    ]);
+
+    constructor(@Inject(PLATFORM_ID) platformId: Object) {
         super();
         this.isBrowser = isPlatformBrowser(platformId);
     }
 
     ngOnInit(): void {
         this.loadClientData();
-        this.loadServerData({ first: 0, rows: this.serverPageSize });
+        // this.loadServerData({ first: 0, rows: this.serverPageSize });
+        // NOTE: Do NOT call loadServerData() here.
+        // PrimeNG lazy p-table fires (onLazyLoad) automatically on first render,
+        // which calls onServerLazyLoad() → loadServerData(). Calling it manually
+        // as well would duplicate the request on every page load.
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -121,7 +170,7 @@ export class ShowingDataComponent extends BaseComponent implements OnInit {
         this.chartLoading.set(true);
 
         this.bookService.getBooksSilently(1, 50)
-            .pipe(takeUntil(this.destroy$)) // why this raw is important? what is destroy$?  answer : because it is used to unsubscribe from the observable when the component is destroyed
+            .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (res) => {
                     this.clientBooks.set(res.data.items);
@@ -138,10 +187,6 @@ export class ShowingDataComponent extends BaseComponent implements OnInit {
             });
     }
 
-    /**
-     * Called when the user types in the global search input.
-     * Passes the value to PrimeNG's global filter method.
-     */
     onClientGlobalFilter(table: any, event: Event): void {
         const value = (event.target as HTMLInputElement).value;
         table.filterGlobal(value, 'contains');
@@ -150,38 +195,14 @@ export class ShowingDataComponent extends BaseComponent implements OnInit {
     // ═══════════════════════════════════════════════════════════════
     // Server-Side Table (Lazy Loading)
     // ═══════════════════════════════════════════════════════════════
-    //
-    // PrimeNG fires `onLazyLoad` with a TableLazyLoadEvent whenever
-    // the user paginates, sorts, or filters. The event contains:
-    //
-    //   event.first      → row offset (0-based), e.g. 0, 10, 20 …
-    //   event.rows       → page size, e.g. 10
-    //   event.sortField  → column field name to sort by (e.g. 'title')
-    //   event.sortOrder  → 1 = ascending, -1 = descending
-    //   event.filters    → object map of active filters, shaped as:
-    //                      { [field]: { value: string, matchMode: string } }
-    //
-    // We convert these into HTTP query parameters for the API:
-    //
-    //   PageNumber  = Math.floor(event.first / event.rows) + 1
-    //   PageSize    = event.rows
-    //   SortBy      = event.sortField   (if present)
-    //   SortDir     = event.sortOrder === 1 ? 'asc' : 'desc'
-    //   Title       = event.filters['title']?.value   (per-column filter)
-    //
-    // In this demo, the backend only supports PageNumber & PageSize.
-    // The sorting/filtering params are shown as comments to illustrate
-    // how they would be forwarded in a real application.
-    // ═══════════════════════════════════════════════════════════════
 
-    onServerLazyLoad(event: TableLazyLoadEvent): void { // what is TableLazyLoadEvent? answer : it is an event that is fired when the user paginates, sorts, or filters the table
+    onServerLazyLoad(event: TableLazyLoadEvent): void {
         this.loadServerData(event);
     }
 
     private loadServerData(event: TableLazyLoadEvent): void {
         this.serverTableLoading.set(true);
 
-        // Calculate 1-based page number from 0-based offset
         const page = Math.floor((event.first ?? 0) / (event.rows ?? this.serverPageSize)) + 1;
         const size = event.rows ?? this.serverPageSize;
 
@@ -226,6 +247,61 @@ export class ShowingDataComponent extends BaseComponent implements OnInit {
     }
 
     // ═══════════════════════════════════════════════════════════════
+    // Actions
+    // ═══════════════════════════════════════════════════════════════
+
+    /** Opens the popup menu anchored to the event target */
+    showActionsMenu(event: Event, book: Book, menu: Menu): void {
+        this.selectedBook.set(book);
+        menu.toggle(event);
+    }
+
+    onAdd(): void {
+        this.router.navigate(['/showing-data/add']);
+    }
+
+    onEdit(book: Book): void {
+        this.router.navigate(['/showing-data/edit', book.id]);
+    }
+
+    onDelete(book: Book): void {
+        this.confirmationService.confirm({
+            header: this.translationService.translate('showingData.actions.deleteConfirmHeader'),
+            message: this.translationService.translate('showingData.actions.deleteConfirmMessage'),
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: this.translationService.translate('common.yes'),
+            rejectLabel: this.translationService.translate('common.no'),
+            acceptButtonProps: { severity: 'danger' },
+            accept: () => {
+                // this.bookService.deleteBookSilently(book.id)
+                //     .pipe(takeUntil(this.destroy$))
+                //     .subscribe({
+                //         next: (res) => {
+                //             if (res.isSuccess) {
+                //                 this.messageService.add({
+                //                     severity: 'success',
+                //                     summary: this.translationService.translate('showingData.actions.deleteSuccess'),
+                //                     life: 3000
+                //                 });
+                //                 // Refresh both tables
+                //                 this.loadClientData();
+                //                 this.loadServerData({ first: 0, rows: this.serverPageSize });
+                //             }
+                //         },
+                //         error: (err) => {
+                //             this.handleError(err);
+                //             this.messageService.add({
+                //                 severity: 'error',
+                //                 summary: this.translationService.translate('showingData.actions.deleteError'),
+                //                 life: 3000
+                //             });
+                //         }
+                //     });
+            }
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
     // Chart (ApexCharts — Bar chart: Views vs Downloads)
     // ═══════════════════════════════════════════════════════════════
 
@@ -235,7 +311,6 @@ export class ShowingDataComponent extends BaseComponent implements OnInit {
             return;
         }
 
-        // Take the first 10 books for a clean, readable chart
         const chartData = books.slice(0, 10);
 
         const options: ChartOptions = {
@@ -269,9 +344,7 @@ export class ShowingDataComponent extends BaseComponent implements OnInit {
             xaxis: {
                 categories: chartData.map(b => b.title.length > 15 ? b.title.substring(0, 15) + '…' : b.title),
                 labels: {
-                    style: {
-                        fontSize: '0.75rem'
-                    },
+                    style: { fontSize: '0.75rem' },
                     rotate: -45,
                     rotateAlways: false
                 }
@@ -293,9 +366,7 @@ export class ShowingDataComponent extends BaseComponent implements OnInit {
                 }
             },
             tooltip: {
-                y: {
-                    formatter: (val: number) => `${val}`
-                }
+                y: { formatter: (val: number) => `${val}` }
             },
             legend: {
                 position: 'top',

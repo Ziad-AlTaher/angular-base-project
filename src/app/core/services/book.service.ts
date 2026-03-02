@@ -46,4 +46,49 @@ export class BookService extends BaseService<Book> {
             }
         );
     }
+
+    // ─── Silent-context helper ────────────────────────────────────
+    /**
+     * Returns an HttpContext with IS_SILENT_LOAD=true so the global
+     * spinner is suppressed. Used by all CRUD wrappers below.
+     */
+    private silentCtx() {
+        return { context: new HttpContext().set(IS_SILENT_LOAD, true) };
+    }
+
+    // ─── Silent CRUD wrappers ─────────────────────────────────────
+
+    /** Get a single book without triggering the global spinner. */
+    getBookByIdSilently(id: number): Observable<ApiResponse<Book>> {
+        return this.http.get<ApiResponse<Book>>(
+            `${this.apiUrl}/${this.endpoint}/${id}`,
+            this.silentCtx()
+        );
+    }
+
+    /** Create a book without triggering the global spinner. */
+    createBookSilently(book: Partial<Book>): Observable<ApiResponse<Book>> {
+        return this.http.post<ApiResponse<Book>>(
+            `${this.apiUrl}/${this.endpoint}`,
+            book,
+            this.silentCtx()
+        );
+    }
+
+    /** Update a book without triggering the global spinner. */
+    updateBookSilently(id: number, book: Partial<Book>): Observable<ApiResponse<Book>> {
+        return this.http.put<ApiResponse<Book>>(
+            `${this.apiUrl}/${this.endpoint}/${id}`,
+            book,
+            this.silentCtx()
+        );
+    }
+
+    /** Delete a book without triggering the global spinner. */
+    deleteBookSilently(id: number): Observable<ApiResponse<void>> {
+        return this.http.delete<ApiResponse<void>>(
+            `${this.apiUrl}/${this.endpoint}/${id}`,
+            this.silentCtx()
+        );
+    }
 }

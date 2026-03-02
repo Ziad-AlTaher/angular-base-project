@@ -7,13 +7,14 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
+import { networkRetryInterceptor } from './core/interceptors/network-retry.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
-    provideHttpClient(withFetch(), withInterceptors([loadingInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([loadingInterceptor, networkRetryInterceptor])),
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {

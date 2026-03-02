@@ -5,8 +5,16 @@
             <h1 class="page-title">{{ 'showingData.title' | translate }}</h1>
             <p class="page-subtitle">{{ 'showingData.subtitle' | translate }}</p>
         </div>
+        <div class="header-actions">
+            <p-button [label]="'showingData.actions.add' | translate" icon="pi pi-plus" (onClick)="onAdd()" />
+        </div>
         <div class="header-decoration"></div>
     </div>
+
+    <!-- Confirm Dialog -->
+    <p-confirmDialog />
+    <!-- Toast -->
+    <p-toast position="top-center" />
 
     <!-- ═══════════════════════════════════════════════════════ -->
     <!-- Section 1: Client-Side Data Table                      -->
@@ -52,7 +60,7 @@
                 [globalFilterFields]="['title', 'author', 'publisher', 'categoryNameEn', 'categoryNameAr']"
                 [sortMode]="'single'" [showCurrentPageReport]="true"
                 styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm"
-                [tableStyle]="{ 'min-width': '50rem' }" responsiveLayout="scroll">
+                [tableStyle]="{ 'min-width': '55rem' }" responsiveLayout="scroll">
 
                 <ng-template #header>
                     <tr>
@@ -79,6 +87,9 @@
                             {{ 'showingData.colDownloads' | translate }}
                             <p-sortIcon field="downloadCount" />
                         </th>
+                        <th class="actions-col">
+                            {{ 'showingData.colActions' | translate }}
+                        </th>
                     </tr>
                 </ng-template>
 
@@ -102,12 +113,16 @@
                                 {{ book.downloadCount }}
                             </span>
                         </td>
+                        <td class="actions-col">
+                            <p-button icon="pi pi-ellipsis-v" severity="secondary" [rounded]="true" [text]="true"
+                                size="small" (onClick)="showActionsMenu($event, book, clientActionsMenu)" />
+                        </td>
                     </tr>
                 </ng-template>
 
                 <ng-template #emptymessage>
                     <tr>
-                        <td colspan="6" class="empty-message">
+                        <td colspan="7" class="empty-message">
                             <i class="pi pi-inbox"></i>
                             {{ 'showingData.noData' | translate }}
                         </td>
@@ -147,29 +162,11 @@
                 }
             </div>
             } @else {
-            <!--
-                Server-side p-table with lazy loading.
-
-                How it works:
-                - [lazy]="true" tells PrimeNG NOT to sort/filter/paginate locally.
-                - Instead, it fires (onLazyLoad) with a TableLazyLoadEvent object.
-                - We extract pagination, sort, and filter params from the event
-                  and send them to the API as HTTP query parameters.
-
-                The TableLazyLoadEvent contains:
-                  event.first      → 0-based row offset (e.g., 0, 10, 20)
-                  event.rows       → page size (e.g., 10)
-                  event.sortField  → column key to sort by (e.g., 'title')
-                  event.sortOrder  → 1 for ASC, -1 for DESC
-                  event.filters    → { columnField: { value, matchMode } }
-
-                See showing-data.ts for the full conversion logic.
-            -->
             <p-table [value]="serverBooks()" [lazy]="true" [paginator]="true" [rows]="serverPageSize"
                 [totalRecords]="serverTotalRecords()" [loading]="serverTableLoading()"
                 (onLazyLoad)="onServerLazyLoad($event)" [sortMode]="'single'" [showCurrentPageReport]="true"
                 styleClass="p-datatable-striped p-datatable-gridlines p-datatable-sm"
-                [tableStyle]="{ 'min-width': '50rem' }" responsiveLayout="scroll">
+                [tableStyle]="{ 'min-width': '55rem' }" responsiveLayout="scroll">
 
                 <ng-template #header>
                     <tr>
@@ -196,6 +193,9 @@
                             {{ 'showingData.colDownloads' | translate }}
                             <p-sortIcon field="downloadCount" />
                         </th>
+                        <th class="actions-col">
+                            {{ 'showingData.colActions' | translate }}
+                        </th>
                     </tr>
                 </ng-template>
 
@@ -219,12 +219,16 @@
                                 {{ book.downloadCount }}
                             </span>
                         </td>
+                        <td class="actions-col">
+                            <p-button icon="pi pi-ellipsis-v" severity="secondary" [rounded]="true" [text]="true"
+                                size="small" (onClick)="showActionsMenu($event, book, serverActionsMenu)" />
+                        </td>
                     </tr>
                 </ng-template>
 
                 <ng-template #emptymessage>
                     <tr>
-                        <td colspan="6" class="empty-message">
+                        <td colspan="7" class="empty-message">
                             <i class="pi pi-inbox"></i>
                             {{ 'showingData.noData' | translate }}
                         </td>
@@ -234,6 +238,10 @@
             }
         </div>
     </section>
+
+    <!-- Shared context menus (one per table so they don't conflict) -->
+    <p-menu #clientActionsMenu [model]="actionMenuItems()" [popup]="true" appendTo="body" />
+    <p-menu #serverActionsMenu [model]="actionMenuItems()" [popup]="true" appendTo="body" />
 
     <!-- ═══════════════════════════════════════════════════════ -->
     <!-- Section 3: Chart (ApexCharts — Views vs Downloads)     -->
@@ -261,4 +269,5 @@
             }
         </div>
     </section>
+
 </section>
