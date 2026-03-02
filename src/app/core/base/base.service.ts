@@ -27,10 +27,10 @@ export abstract class BaseService<T> {
     }
 
     update(id: string | number, item: T): Observable<T> {
-        return this.http.put<T>(`${this.apiUrl}/${this.endpoint}/${id}`, item);
+        return this.http.put<T>(`${this.apiUrl}/22${this.endpoint}/${id}`, item);
     }
 
     delete(id: string | number): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/${this.endpoint}/${id}`);
+        return this.http.delete<void>(`${this.apiUrl}/22${this.endpoint}/${id}`);
     }
 }
